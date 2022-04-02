@@ -52,8 +52,6 @@
 #include "soc/soc_caps.h"
 #include "HWCDC.h"
 
-#define SERIAL_PORT_HARDWARE Serial
-
 class HardwareSerial: public Stream
 {
 public:
@@ -116,8 +114,6 @@ protected:
     int _uart_nr;
     uart_t* _uart;
     size_t _rxBufferSize;
-    int8_t _rxPin = -1;
-    int8_t _txPin = -1;
 };
 
 extern void serialEventRun(void) __attribute__((weak));
@@ -127,10 +123,10 @@ extern void serialEventRun(void) __attribute__((weak));
 #define ARDUINO_USB_CDC_ON_BOOT 0
 #endif
 #if ARDUINO_USB_CDC_ON_BOOT //Serial used for USB CDC
+#if !ARDUINO_USB_MODE
 #include "USB.h"
 #include "USBCDC.h"
-extern HardwareSerial Serial0;
-#elif ARDUINO_HW_CDC_ON_BOOT
+#endif
 extern HardwareSerial Serial0;
 #else
 extern HardwareSerial Serial;

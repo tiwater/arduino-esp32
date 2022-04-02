@@ -10,7 +10,7 @@
 #ifndef SOC_RX0
 #if CONFIG_IDF_TARGET_ESP32
 #define SOC_RX0 3
-#elif CONFIG_IDF_TARGET_ESP32S2
+#elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
 #define SOC_RX0 44
 #elif CONFIG_IDF_TARGET_ESP32C3
 #define SOC_RX0 20
@@ -20,7 +20,7 @@
 #ifndef SOC_TX0
 #if CONFIG_IDF_TARGET_ESP32
 #define SOC_TX0 1
-#elif CONFIG_IDF_TARGET_ESP32S2
+#elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
 #define SOC_TX0 43
 #elif CONFIG_IDF_TARGET_ESP32C3
 #define SOC_TX0 21
@@ -35,7 +35,7 @@ void serialEvent(void) {}
 #ifndef RX1
 #if CONFIG_IDF_TARGET_ESP32
 #define RX1 9
-#elif CONFIG_IDF_TARGET_ESP32S2
+#elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
 #define RX1 18
 #elif CONFIG_IDF_TARGET_ESP32C3
 #define RX1 18
@@ -45,7 +45,7 @@ void serialEvent(void) {}
 #ifndef TX1
 #if CONFIG_IDF_TARGET_ESP32
 #define TX1 10
-#elif CONFIG_IDF_TARGET_ESP32S2
+#elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
 #define TX1 17
 #elif CONFIG_IDF_TARGET_ESP32C3
 #define TX1 19
@@ -60,12 +60,16 @@ void serialEvent1(void) {}
 #ifndef RX2
 #if CONFIG_IDF_TARGET_ESP32
 #define RX2 16
+#else
+#define RX2 -1
 #endif
 #endif
 
 #ifndef TX2
 #if CONFIG_IDF_TARGET_ESP32
 #define TX2 17
+#else
+#define TX2 -1
 #endif
 #endif
 
@@ -75,8 +79,6 @@ void serialEvent2(void) {}
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
 #if ARDUINO_USB_CDC_ON_BOOT //Serial used for USB CDC
-HardwareSerial Serial0(0);
-#elif ARDUINO_HW_CDC_ON_BOOT
 HardwareSerial Serial0(0);
 #else
 HardwareSerial Serial(0);
@@ -91,8 +93,6 @@ HardwareSerial Serial2(2);
 void serialEventRun(void)
 {
 #if ARDUINO_USB_CDC_ON_BOOT //Serial used for USB CDC
-    if(Serial0.available()) serialEvent();
-#elif ARDUINO_HW_CDC_ON_BOOT
     if(Serial0.available()) serialEvent();
 #else
     if(Serial.available()) serialEvent();
@@ -120,63 +120,24 @@ void HardwareSerial::begin(unsigned long baud, uint32_t config, int8_t rxPin, in
         // thus do not disable debug output
         end(false);
     }
-    if(_uart_nr == 0) {
-        // If begin() provides txPin and rxPin, override the original pins
-        if(rxPin < 0){
-            if(_rxPin < 0){
-                _rxPin = SOC_RX0;
-            }
-        } else {
-            _rxPin = rxPin;
-        }
-        if(txPin < 0){
-            if(_txPin < 0){
-                _txPin = SOC_RX0;
-            }
-        } else {
-            _txPin = txPin;
-        }
+    if(_uart_nr == 0 && rxPin < 0 && txPin < 0) {
+        rxPin = SOC_RX0;
+        txPin = SOC_TX0;
     }
 #if SOC_UART_NUM > 1
-    if(_uart_nr == 1) {
-        // If begin() provides txPin and rxPin, override the original pins
-        if(rxPin < 0){
-            if(_rxPin < 0){
-                _rxPin = RX1;
-            }
-        } else {
-            _rxPin = rxPin;
-        }
-        if(txPin < 0){
-            if(_txPin < 0){
-                _txPin = TX1;
-            }
-        } else {
-            _txPin = txPin;
-        }
+    if(_uart_nr == 1 && rxPin < 0 && txPin < 0) {
+        rxPin = RX1;
+        txPin = TX1;
     }
 #endif
 #if SOC_UART_NUM > 2
-    if(_uart_nr == 2) {
-        // If begin() provides txPin and rxPin, override the original pins
-        if(rxPin < 0){
-            if(_rxPin < 0){
-                _rxPin = RX2;
-            }
-        } else {
-            _rxPin = rxPin;
-        }
-        if(txPin < 0){
-            if(_txPin < 0){
-                _txPin = TX2;
-            }
-        } else {
-            _txPin = txPin;
-        }
+    if(_uart_nr == 2 && rxPin < 0 && txPin < 0) {
+        rxPin = RX2;
+        txPin = TX2;
     }
 #endif
 
-    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, _rxPin, _txPin, _rxBufferSize, invert, rxfifo_full_thrhd);
+    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, rxPin, txPin, _rxBufferSize, invert, rxfifo_full_thrhd);
     if (!baud) {
         // using baud rate as zero, forces it to try to detect the current baud rate in place
         uartStartDetectBaudrate(_uart);
@@ -190,7 +151,7 @@ void HardwareSerial::begin(unsigned long baud, uint32_t config, int8_t rxPin, in
 
         if(detectedBaudRate) {
             delay(100); // Give some time...
-            _uart = uartBegin(_uart_nr, detectedBaudRate, config, _rxPin, _txPin, _rxBufferSize, invert, rxfifo_full_thrhd);
+            _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, _rxBufferSize, invert, rxfifo_full_thrhd);
         } else {
             log_e("Could not detect baudrate. Serial data at the port must be present within the timeout for detection to be possible");
             _uart = NULL;
@@ -313,11 +274,7 @@ void HardwareSerial::setRxInvert(bool invert)
 
 void HardwareSerial::setPins(uint8_t rxPin, uint8_t txPin)
 {
-    _rxPin = rxPin;
-    _txPin = txPin;
-    if(_uart != NULL) {
-        uartSetPins(_uart, rxPin, txPin);
-    }
+    uartSetPins(_uart, rxPin, txPin);
 }
 
 size_t HardwareSerial::setRxBufferSize(size_t new_size) {
