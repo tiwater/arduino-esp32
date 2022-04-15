@@ -56,11 +56,10 @@ uint8_t channels_resolution[LEDC_CHANNELS] = {0};
 
 double ledcSetup(uint8_t chan, double freq, uint8_t bit_num)
 {
-    if(chan >= LEDC_CHANNELS || bit_num > LEDC_MAX_BIT_WIDTH){
-        log_e("No more LEDC channels available! (maximum %u) or bit width too big (maximum %u)", LEDC_CHANNELS, LEDC_MAX_BIT_WIDTH);
+    if(chan >= LEDC_CHANNELS){
+        log_e("No more LEDC channels available! You can have maximum %u", LEDC_CHANNELS);
         return 0;
     }
-
     uint8_t group=(chan/8), timer=((chan/2)%4);
 
     ledc_timer_config_t ledc_timer = {
@@ -70,12 +69,9 @@ double ledcSetup(uint8_t chan, double freq, uint8_t bit_num)
         .freq_hz          = freq,
         .clk_cfg          = LEDC_DEFAULT_CLK
     };
-    if(ledc_timer_config(&ledc_timer) != ESP_OK)
-    {
-        log_e("ledc setup failed!");
-        return 0;
-    }
+    ledc_timer_config(&ledc_timer);
     channels_resolution[chan] = bit_num;
+
     return ledc_get_freq(group,timer);
 }
 
@@ -99,7 +95,7 @@ void ledcWrite(uint8_t chan, uint32_t duty)
 
 uint32_t ledcRead(uint8_t chan)
 {
-    if(chan >= LEDC_CHANNELS){
+     if(chan >= LEDC_CHANNELS){
         return 0;
     }
     uint8_t group=(chan/8), channel=(chan%8);
@@ -134,12 +130,7 @@ double ledcWriteTone(uint8_t chan, double freq)
         .freq_hz          = freq, 
         .clk_cfg          = LEDC_DEFAULT_CLK
     };
-
-    if(ledc_timer_config(&ledc_timer) != ESP_OK)
-    {
-        log_e("ledcSetup failed!");
-        return 0;
-    }
+    ledc_timer_config(&ledc_timer);
     channels_resolution[chan] = 10;
 
     double res_freq = ledc_get_freq(group,timer);
@@ -162,7 +153,7 @@ double ledcWriteNote(uint8_t chan, note_t note, uint8_t octave){
 
 void ledcAttachPin(uint8_t pin, uint8_t chan)
 {
-    if(chan >= LEDC_CHANNELS){
+     if(chan >= LEDC_CHANNELS){
         return;
     }
     uint8_t group=(chan/8), channel=(chan%8), timer=((chan/2)%4);
@@ -177,6 +168,8 @@ void ledcAttachPin(uint8_t pin, uint8_t chan)
         .hpoint         = 0
     };
     ledc_channel_config(&ledc_channel);
+
+    pinMode(pin,OUTPUT);
 }
 
 void ledcDetachPin(uint8_t pin)
@@ -186,8 +179,7 @@ void ledcDetachPin(uint8_t pin)
 
 double ledcChangeFrequency(uint8_t chan, double freq, uint8_t bit_num)
 {
-    if(chan >= LEDC_CHANNELS || bit_num > LEDC_MAX_BIT_WIDTH){
-        log_e("LEDC channel not available! (maximum %u) or bit width too big (maximum %u)", LEDC_CHANNELS, LEDC_MAX_BIT_WIDTH);
+     if(chan >= LEDC_CHANNELS){
         return 0;
     }
     uint8_t group=(chan/8), timer=((chan/2)%4);
@@ -199,13 +191,9 @@ double ledcChangeFrequency(uint8_t chan, double freq, uint8_t bit_num)
         .freq_hz          = freq, 
         .clk_cfg          = LEDC_DEFAULT_CLK
     };
-
-    if(ledc_timer_config(&ledc_timer) != ESP_OK)
-    {
-        log_e("ledcChangeFrequency failed!");
-        return 0;
-    }
+    ledc_timer_config(&ledc_timer);
     channels_resolution[chan] = bit_num;
+
     return ledc_get_freq(group,timer);
 }
 

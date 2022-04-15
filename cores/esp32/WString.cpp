@@ -24,7 +24,6 @@
 #include <Arduino.h>
 #include "WString.h"
 #include "stdlib_noniso.h"
-#include "esp32-hal-log.h"
 
 /*********************************************/
 /*  Constructors                             */
@@ -774,10 +773,8 @@ void String::replace(const String& find, const String& replace) {
         }
         if(size == len())
             return;
-        if(size > capacity() && !changeBuffer(size)) {
-            log_w("String.Replace() Insufficient space to replace string");
-            return;
-        }
+        if(size > capacity() && !changeBuffer(size))
+            return; // XXX: tell user!
         int index = len() - 1;
         while(index >= 0 && (index = lastIndexOf(find, index)) >= 0) {
             readFrom = wbuffer() + index + find.len();

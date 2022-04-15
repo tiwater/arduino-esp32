@@ -121,7 +121,7 @@ bool sdSelectCard(uint8_t pdrv)
 {
     ardu_sdcard_t * card = s_cards[pdrv];
     digitalWrite(card->ssPin, LOW);
-    bool s = sdWait(pdrv, 500);
+    bool s = sdWait(pdrv, 300);
     if (!s) {
         log_e("Select Failed");
         digitalWrite(card->ssPin, HIGH);
@@ -506,17 +506,10 @@ DSTATUS ff_sd_initialize(uint8_t pdrv)
         card->spi->transfer(0XFF);
     }
 
-    // Fix mount issue - sdWait fail ignored before command GO_IDLE_STATE
-    digitalWrite(card->ssPin, LOW);
-    if(!sdWait(pdrv, 500)){
-        log_w("sdWait fail ignored, card initialize continues");
-    }
-    if (sdCommand(pdrv, GO_IDLE_STATE, 0, NULL) != 1){
-        sdDeselectCard(pdrv);
+    if (sdTransaction(pdrv, GO_IDLE_STATE, 0, NULL) != 1) {
         log_w("GO_IDLE_STATE failed");
         goto unknown_card;
     }
-    sdDeselectCard(pdrv);
 
     token = sdTransaction(pdrv, CRC_ON_OFF, 1, NULL);
     if (token == 0x5) {

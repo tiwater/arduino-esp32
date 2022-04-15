@@ -30,6 +30,7 @@
 #include "common/tusb_common.h"
 #include "osal/osal.h"
 #include "common/tusb_fifo.h"
+#include "dcd_attr.h"
 
 #ifdef __cplusplus
  extern "C" {
@@ -40,7 +41,7 @@
 //--------------------------------------------------------------------+
 
 #ifndef CFG_TUD_ENDPPOINT_MAX
-  #define CFG_TUD_ENDPPOINT_MAX   TUP_DCD_ENDPOINT_MAX
+  #define CFG_TUD_ENDPPOINT_MAX   DCD_ATTR_ENDPOINT_MAX
 #endif
 
 //--------------------------------------------------------------------+
@@ -105,12 +106,12 @@ typedef struct TU_ATTR_ALIGNED(4)
 void dcd_init       (uint8_t rhport);
 
 // Interrupt Handler
-#if __GNUC__ && !defined(__ARMCC_VERSION)
+#if __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wredundant-decls"
 #endif
 void dcd_int_handler(uint8_t rhport);
-#if __GNUC__ && !defined(__ARMCC_VERSION)
+#if __GNUC__
 #pragma GCC diagnostic pop
 #endif
 

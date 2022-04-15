@@ -3,7 +3,9 @@
 export PLATFORMIO_ESP32_PATH="$HOME/.platformio/packages/framework-arduinoespressif32"
 PLATFORMIO_ESP32_URL="https://github.com/platformio/platform-espressif32.git#feature/arduino-idf-master"
 
-TOOLCHAIN_VERSION="8.4.0+2021r2-patch3"
+XTENSA32_TOOLCHAIN_VERSION="8.4.0+2021r1"
+XTENSA32S2_TOOLCHAIN_VERSION="8.4.0+2021r1"
+RISCV_TOOLCHAIN_VERSION="8.4.0+2021r1"
 ESPTOOLPY_VERSION="~1.30100.0"
 ESPRESSIF_ORGANIZATION_NAME="espressif"
 
@@ -28,12 +30,9 @@ replace_script+="data['packages']['toolchain-xtensa-esp32']['owner']='$ESPRESSIF
 replace_script+="data['packages']['toolchain-xtensa-esp32s2']['owner']='$ESPRESSIF_ORGANIZATION_NAME';"
 replace_script+="data['packages']['toolchain-riscv32-esp']['owner']='$ESPRESSIF_ORGANIZATION_NAME';"
 # Update versions to use the upstream
-replace_script+="data['packages']['toolchain-xtensa-esp32']['version']='$TOOLCHAIN_VERSION';"
-replace_script+="data['packages']['toolchain-xtensa-esp32s2']['version']='$TOOLCHAIN_VERSION';"
-replace_script+="data['packages']['toolchain-riscv32-esp']['version']='$TOOLCHAIN_VERSION';"
-# Add ESP32-S3 Toolchain
-replace_script+="data['packages'].update({'toolchain-xtensa-esp32s3':{'type':'toolchain','optional':True,'owner':'$ESPRESSIF_ORGANIZATION_NAME','version':'$TOOLCHAIN_VERSION'}});"
-replace_script+="data['packages']['toolchain-xtensa-esp32'].update({'optional':False});"
+replace_script+="data['packages']['toolchain-xtensa-esp32']['version']='$XTENSA32_TOOLCHAIN_VERSION';"
+replace_script+="data['packages']['toolchain-xtensa-esp32s2']['version']='$XTENSA32S2_TOOLCHAIN_VERSION';"
+replace_script+="data['packages']['toolchain-riscv32-esp']['version']='$RISCV_TOOLCHAIN_VERSION';"
 # esptool.py may require an upstream version (for now platformio is the owner)
 replace_script+="data['packages']['tool-esptoolpy']['version']='$ESPTOOLPY_VERSION';"
 # Save results

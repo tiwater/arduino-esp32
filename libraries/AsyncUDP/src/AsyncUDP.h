@@ -4,7 +4,6 @@
 #include "IPAddress.h"
 #include "IPv6Address.h"
 #include "Print.h"
-#include "Stream.h"
 #include <functional>
 extern "C" {
 #include "lwip/ip_addr.h"

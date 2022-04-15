@@ -289,9 +289,6 @@ char * ets_strdup(const char *s);
 #ifndef os_strlcpy
 #define os_strlcpy(d, s, n) strlcpy((d), (s), (n))
 #endif
-#ifndef os_strcat
-#define os_strcat(d, s) strcat((d), (s))
-#endif
 
 #ifndef os_snprintf
 #ifdef _MSC_VER
@@ -299,9 +296,6 @@ char * ets_strdup(const char *s);
 #else
 #define os_snprintf snprintf
 #endif
-#endif
-#ifndef os_sprintf
-#define os_sprintf sprintf
 #endif
 
 static inline int os_snprintf_error(size_t size, int res)

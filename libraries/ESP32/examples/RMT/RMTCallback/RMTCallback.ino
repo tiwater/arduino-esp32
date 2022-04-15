@@ -12,10 +12,7 @@ class MyProcessor {
 
   public:
     MyProcessor(uint8_t pin, float nanoTicks) {
-      if ((rmt_recv = rmtInit(pin, RMT_RX_MODE, RMT_MEM_192)) == NULL)
-      {
-        Serial.println("init receiver failed\n");
-      }
+      assert((rmt_recv = rmtInit(21, RMT_RX_MODE, RMT_MEM_192)));
 
       realNanoTick = rmtSetTick(rmt_recv, nanoTicks);
     };
@@ -62,6 +59,6 @@ void setup()
 
 void loop()
 {
-  Serial.printf("GPIO 4: %08x 5: %08x 10: %08x\n", mp1.val(), mp2.val(), mp3.val());
+  Serial.printf("GPIO 4: %08x 5: %08x 6: %08x\n", mp1.val(), mp2.val(), mp3.val());
   delay(500);
 }

@@ -19,11 +19,6 @@
 
   http://www.arduino.cc/en/Tutorial/KeyboardMessage
 */
-#if ARDUINO_USB_MODE
-#warning This sketch should be used when USB is in OTG mode
-void setup(){}
-void loop(){}
-#else
 
 #include "USB.h"
 #include "USBHIDKeyboard.h"
@@ -58,4 +53,3 @@ void loop() {
   // save the current button state for comparison next time:
   previousButtonState = buttonState;
 }
-#endif /* ARDUINO_USB_MODE */

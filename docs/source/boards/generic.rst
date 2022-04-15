@@ -26,4 +26,9 @@ Pin Layout
 
 Add here the pin layout image (not required).
 
-.. include:: ../common/datasheet.inc
+Resources
+---------
+
+* `ESP32`_ (Datasheet)
+
+.. _ESP32: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf

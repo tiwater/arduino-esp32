@@ -1,8 +1,3 @@
-#if ARDUINO_USB_MODE
-#warning This sketch should be used when USB is in OTG mode
-void setup(){}
-void loop(){}
-#else
 #include "USB.h"
 #include "USBHIDMouse.h"
 #include "USBHIDKeyboard.h"
@@ -78,10 +73,7 @@ static void usbEventCallback(void* arg, esp_event_base_t event_base, int32_t eve
         }
         HWSerial.println();
         break;
-      case ARDUINO_USB_CDC_RX_OVERFLOW_EVENT:
-        HWSerial.printf("CDC RX Overflow of %d bytes", data->rx_overflow.dropped_bytes);
-        break;
-
+      
       default:
         break;
     }
@@ -219,4 +211,3 @@ void loop() {
     }
   }
 }
-#endif /* ARDUINO_USB_MODE */
