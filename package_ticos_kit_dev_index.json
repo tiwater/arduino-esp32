@@ -12,12 +12,12 @@
         {
           "name": "Ticos Kit",
           "architecture": "esp32",
-          "version": "2.0.3-RC1.1",
+          "version": "2.0.3-alpha.3",
           "category": "Ticos Kit",
-          "url": "https://github.com/tiwater/arduino-esp32/releases/download/2.0.3-RC1.1/ticos-kit-2.0.3-RC1.1.zip",
-          "archiveFileName": "ticos-kit-2.0.3-RC1.1.zip",
-          "checksum": "SHA-256:f72ee845237738c323f08a9ed62879763208775562e1ff56056ab57073ea0a71",
-          "size": "244971775",
+          "url": "https://github.com/tiwater/arduino-esp32/releases/download/2.0.3-alpha.3/ticos-kit-2.0.3-alpha.3.zip",
+          "archiveFileName": "ticos-kit-2.0.3-alpha.3.zip",
+          "checksum": "SHA-256:e55b228f62e38a5e4fdd8af811acf0bbc0897eab13767c01b87a4dbfc765d98f",
+          "size": "245018895",
           "help": {
             "online": ""
           },
