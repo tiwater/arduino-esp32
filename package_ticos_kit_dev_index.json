@@ -12,6 +12,67 @@
         {
           "name": "Ticos Kit",
           "architecture": "esp32",
+          "version": "2.0.3-alpha.6",
+          "category": "Ticos Kit",
+          "url": "https://github.com/tiwater/arduino-esp32/releases/download/2.0.3-alpha.6/ticos-kit-2.0.3-alpha.6.zip",
+          "archiveFileName": "ticos-kit-2.0.3-alpha.6.zip",
+          "checksum": "SHA-256:b832325a0e051c4fed37949371dc12d326fcdf3333a73cdd3c427c84d3141ea3",
+          "size": "245020154",
+          "help": {
+            "online": ""
+          },
+          "boards": [
+            {
+              "name": "Ticos Kit Aksu"
+            },
+            {
+              "name": "Ticos Kit Longan"
+            },
+            {
+              "name": "Ticos Kit Orange"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "ticos-kit",
+              "name": "riscv32-esp-elf-gcc",
+              "version": "gcc8_4_0-esp-2021r2-patch3"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "xtensa-esp32-elf-gcc",
+              "version": "gcc8_4_0-esp-2021r2-patch3"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "xtensa-esp32s2-elf-gcc",
+              "version": "gcc8_4_0-esp-2021r2-patch3"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "xtensa-esp32s3-elf-gcc",
+              "version": "gcc8_4_0-esp-2021r2-patch3"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "esptool_py",
+              "version": "3.3.0"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "mkspiffs",
+              "version": "0.2.3"
+            },
+            {
+              "packager": "ticos-kit",
+              "name": "mklittlefs",
+              "version": "3.0.0-gnu12-dc7f933"
+            }
+          ]
+        },
+        {
+          "name": "Ticos Kit",
+          "architecture": "esp32",
           "version": "2.0.3-alpha.5",
           "category": "Ticos Kit",
           "url": "https://github.com/tiwater/arduino-esp32/releases/download/2.0.3-alpha.5/ticos-kit-2.0.3-alpha.5.zip",
