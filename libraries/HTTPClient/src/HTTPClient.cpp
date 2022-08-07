@@ -617,10 +617,23 @@ int HTTPClient::sendRequest(const char * type, uint8_t * payload, size_t size)
             return returnError(HTTPC_ERROR_SEND_HEADER_FAILED);
         }
 
-        // send Payload if needed
+        // 数据包过大时, 拆包发送, 避免发送失败.
         if(payload && size > 0) {
-            if(_client->write(&payload[0], size) != size) {
-                return returnError(HTTPC_ERROR_SEND_PAYLOAD_FAILED);
+            int totallen = size;
+            int sendlen = 0;
+            while(totallen > 0){
+                if (totallen > HTTPCLIENT_MAXSINGLE_PACK_SIZE){
+                    totallen -= HTTPCLIENT_MAXSINGLE_PACK_SIZE;
+                    if (_client->write(payload + sendlen, HTTPCLIENT_MAXSINGLE_PACK_SIZE) != HTTPCLIENT_MAXSINGLE_PACK_SIZE){
+                        return returnError(HTTPC_ERROR_SEND_PAYLOAD_FAILED);
+                    }
+                    sendlen += HTTPCLIENT_MAXSINGLE_PACK_SIZE;
+                }else{
+                    if (_client->write(payload + sendlen, totallen) != totallen){
+                        return returnError(HTTPC_ERROR_SEND_PAYLOAD_FAILED);
+                    }
+                    totallen = 0;
+                }
             }
         }
 
