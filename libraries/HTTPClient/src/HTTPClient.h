@@ -40,6 +40,7 @@
 #include <vector>
 
 #define HTTPCLIENT_DEFAULT_TCP_TIMEOUT (5000)
+#define HTTPCLIENT_MAXSINGLE_PACK_SIZE (4096)
 
 /// HTTP client errors
 #define HTTPC_ERROR_CONNECTION_REFUSED  (-1)
