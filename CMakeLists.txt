@@ -167,7 +167,7 @@ set(BLE_SRCS
   )
 
 set(includedirs
-  variants/${IDF_TARGET}/
+  variants/${VARIANTS}/
   cores/esp32/
   libraries/ArduinoOTA/src
   libraries/AsyncUDP/src
