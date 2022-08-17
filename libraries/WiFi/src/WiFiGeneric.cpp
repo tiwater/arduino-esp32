@@ -83,7 +83,7 @@ esp_err_t set_esp_interface_hostname(esp_interface_t interface, const char * hos
 	return ESP_FAIL;
 }
 
-esp_err_t set_esp_interface_ip(esp_interface_t interface, IPAddress local_ip=IPAddress(), IPAddress gateway=IPAddress(), IPAddress subnet=IPAddress(), IPAddress dhcp_lease_start=INADDR_NONE){
+esp_err_t set_esp_interface_ip(esp_interface_t interface, IPAddress local_ip=IPAddress(), IPAddress gateway=IPAddress(), IPAddress subnet=IPAddress(), IPAddress dhcp_lease_start=IPAddress()){
 	esp_netif_t *esp_netif = esp_netifs[interface];
 	esp_netif_dhcp_status_t status = ESP_NETIF_DHCP_INIT;
 	esp_netif_ip_info_t info;
