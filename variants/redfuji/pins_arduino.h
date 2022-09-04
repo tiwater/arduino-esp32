@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define ILI9342_DRIVER
+
 #define USB_VID 0x303a
 #define USB_PID 0x1001
 
